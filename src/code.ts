@@ -22,18 +22,21 @@ const observer = observable.subscribe(
 );
 
 // we could have multiple observers
-const observer2 = observable.subscribe((x: any) => addItem(x));
+// const observer2 = observable.subscribe((x: any) => addItem(x));
 
 // however, canceling stops only the indicated observer,
 // although we may add extra observers to the indicated observer like below,
 // so that unsubscribing from one, does same to others
 
-observer.add(observer2);
+// observer.add(observer2);
 
 // to cancel an observer, assign it to a variable and call the unsubscribe method
 setTimeout(() => {
-  observer.unsubscribe();
-}, 6001);
+  // HOT Observable is when the producer is emitting values outside of the one declared above
+  const observer2 = observable.subscribe((x: any) =>
+    addItem(`Subscriber 2: ${x}`)
+  );
+}, 1000);
 
 function addItem(val: any) {
   const node = document.createElement("li");
