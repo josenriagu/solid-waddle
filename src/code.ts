@@ -1,4 +1,5 @@
 import { Observable } from "rxjs-compat/observable";
+import "rxjs-compat/add/operator/share";
 
 // COLD Observable is one in which its producer ( the callback in the create method) is activated once its subscription has been activated
 const observable = Observable.create((observer: any) => {
@@ -12,7 +13,8 @@ const observable = Observable.create((observer: any) => {
   } catch (err) {
     observer.error(err);
   }
-});
+  // adding a share function makes the HOT observable start emitting values after the initial values
+}).share();
 
 // subscribe takes 3 arguments, one for next, one for error and one for complete
 const observer = observable.subscribe(
