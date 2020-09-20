@@ -1,6 +1,7 @@
-import { Subject } from "rxjs-compat/Subject";
+import { BehaviorSubject } from "rxjs-compat/BehaviorSubject";
 
-const subject = new Subject();
+// BehaviorSubject requires an initial argument
+const subject = new BehaviorSubject("First");
 
 subject.subscribe(
   (data) => addItem(`Observer 1: ${data}`),
@@ -9,6 +10,7 @@ subject.subscribe(
 );
 
 subject.next("The first thing has been sent");
+subject.next("...Observer 2 is about to be subscribed...");
 
 const observer2 = subject.subscribe((data) => addItem(`Observer 2: ${data}`));
 
