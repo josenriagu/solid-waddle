@@ -1,7 +1,10 @@
-import { BehaviorSubject } from "rxjs-compat/BehaviorSubject";
+import { ReplaySubject } from "rxjs-compat/ReplaySubject";
 
-// BehaviorSubject requires an initial argument
-const subject = new BehaviorSubject("First");
+// ReplaySubject requires an argument to specify the number of values to dispatch to
+// const subject = new ReplaySubject(2);
+
+// or an additional argument to specify offer time in ms
+const subject = new ReplaySubject(30, 200);
 
 subject.subscribe(
   (data) => addItem(`Observer 1: ${data}`),
@@ -9,16 +12,12 @@ subject.subscribe(
   () => addItem("Observer 1 completed!")
 );
 
-subject.next("The first thing has been sent");
-subject.next("...Observer 2 is about to be subscribed...");
+let i = 1;
+let int = setInterval(() => subject.next(i++), 100);
 
-const observer2 = subject.subscribe((data) => addItem(`Observer 2: ${data}`));
-
-subject.next("The second thing has been sent");
-subject.next("A third thing has been sent");
-
-observer2.unsubscribe(); // doesn't get subsequent data anymore
-subject.next("A final thing has been sent");
+setTimeout(() => {
+  const observer2 = subject.subscribe((data) => addItem(`Observer 2: ${data}`));
+}, 500);
 
 function addItem(val: any) {
   const node = document.createElement("li");
