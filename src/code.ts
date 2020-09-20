@@ -1,5 +1,6 @@
 import { Observable } from "rxjs-compat/observable";
 
+// COLD Observable is one in which its producer ( the callback in the create method) is activated once its subscription has been activated
 const observable = Observable.create((observer: any) => {
   try {
     // observers read values coming from the observables
@@ -19,6 +20,15 @@ const observer = observable.subscribe(
   (error: any) => addItem(error),
   () => addItem("Completed!")
 );
+
+// we could have multiple observers
+const observer2 = observable.subscribe((x: any) => addItem(x));
+
+// however, canceling stops only the indicated observer,
+// although we may add extra observers to the indicated observer like below,
+// so that unsubscribing from one, does same to others
+
+observer.add(observer2);
 
 // to cancel an observer, assign it to a variable and call the unsubscribe method
 setTimeout(() => {
